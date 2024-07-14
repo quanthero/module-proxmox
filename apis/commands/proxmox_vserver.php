@@ -78,7 +78,8 @@ class ProxmoxVserver
                             . $vars[$net_field] . ($net_field == 'ip' ? '/32' : '');
                     }
                 }
-
+                // Add the nesting feature
+                $features = 'nesting=1';                
                 // https://pve.proxmox.com/pve-docs/api-viewer/#/nodes/{node}/lxc
                 $response = $this->api->submit('nodes/' . $vars['node'] . '/lxc', [
                     'unprivileged' => $vars['unprivileged'],
@@ -90,7 +91,8 @@ class ProxmoxVserver
                     'storage' => $vars['storage'],
                     'hostname' => $vars['hostname'],
                     'password' => $vars['password'],
-                    'net0' => 'name=eth0,bridge=vmbr0,type=veth,firewall=1' . $net_fields_string,
+                    'net0' => 'name=eth0,bridge=vmbr1,type=veth,firewall=1' . $net_fields_string,
+                    'features' => $features,
                     'onboot' => '0'
                 ], 'POST');
                 break;
